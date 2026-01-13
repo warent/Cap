@@ -171,7 +171,7 @@ export async function generateMetadata(
 						videos: [
 							{
 								url: new URL(
-									`/api/playlist?videoId=${video.id}`,
+									`/api/playlist?videoId=${video.id}&videoType=mp4`,
 									buildEnv.NEXT_PUBLIC_WEB_URL,
 								).toString(),
 								width: 1280,
