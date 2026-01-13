@@ -50,7 +50,7 @@ export async function generateMetadata(
 						videos: [
 							{
 								url: new URL(
-									`/api/playlist?userId=${video.ownerId}&videoId=${video.id}`,
+									`/api/video/stream/${video.id}`,
 									buildEnv.NEXT_PUBLIC_WEB_URL,
 								).toString(),
 								width: 1280,
