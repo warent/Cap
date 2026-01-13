@@ -36,6 +36,7 @@ export async function generateMetadata(
 				onSome: ([video]) => ({
 					title: `${video.name} | Cap Recording`,
 					description: "Watch this video on Cap",
+					type: "video.other",
 					openGraph: {
 						images: [
 							{
@@ -50,7 +51,11 @@ export async function generateMetadata(
 						videos: [
 							{
 								url: new URL(
-									`/api/playlist?userId=${video.ownerId}&videoId=${video.id}`,
+									`/api/video/stream/${video.id}`,
+									buildEnv.NEXT_PUBLIC_WEB_URL,
+								).toString(),
+								secureUrl: new URL(
+									`/api/video/stream/${videoId}`,
 									buildEnv.NEXT_PUBLIC_WEB_URL,
 								).toString(),
 								width: 1280,
