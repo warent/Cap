@@ -157,6 +157,7 @@ export async function generateMetadata(
 				onSome: ([video]) => ({
 					title: `${video.name} | Cap Recording`,
 					description: "Watch this video on Cap",
+					type: "video.other",
 					openGraph: {
 						images: [
 							{
@@ -171,7 +172,11 @@ export async function generateMetadata(
 						videos: [
 							{
 								url: new URL(
-									`/api/playlist?videoId=${video.id}&videoType=mp4`,
+									`/api/video/stream/${videoId}`,
+									buildEnv.NEXT_PUBLIC_WEB_URL,
+								).toString(),
+								secureUrl: new URL(
+									`/api/video/stream/${videoId}`,
 									buildEnv.NEXT_PUBLIC_WEB_URL,
 								).toString(),
 								width: 1280,
@@ -212,6 +217,7 @@ export async function generateMetadata(
 				Effect.succeed({
 					title: "Cap: This video is private",
 					description: "This video is private and cannot be shared.",
+					type: "video.other",
 					openGraph: {
 						images: [
 							{
@@ -226,7 +232,11 @@ export async function generateMetadata(
 						videos: [
 							{
 								url: new URL(
-									`/api/playlist?videoId=${videoId}`,
+									`/api/video/stream/${videoId}`,
+									buildEnv.NEXT_PUBLIC_WEB_URL,
+								).toString(),
+								secureUrl: new URL(
+									`/api/video/stream/${videoId}`,
 									buildEnv.NEXT_PUBLIC_WEB_URL,
 								).toString(),
 								width: 1280,
@@ -562,14 +572,14 @@ async function AuthorizedContent({
 
 	const membersListPromise = video.sharedOrganization?.organizationId
 		? db()
-				.select({ userId: organizationMembers.userId })
-				.from(organizationMembers)
-				.where(
-					eq(
-						organizationMembers.organizationId,
-						video.sharedOrganization.organizationId,
-					),
-				)
+			.select({ userId: organizationMembers.userId })
+			.from(organizationMembers)
+			.where(
+				eq(
+					organizationMembers.organizationId,
+					video.sharedOrganization.organizationId,
+				),
+			)
 		: Promise.resolve([]);
 
 	const commentsPromise = Effect.gen(function* () {
